@@ -55,9 +55,9 @@ def _normalize_with_mask(image, percentile, mask):
     vec_mask = mask.reshape((n,))
     sorted_vec = np.sort(vec[vec_mask])
     m = sorted_vec.size
-    mn_ind = np.clip(np.int(n*percentile), 0, m-1)
+    mn_ind = np.clip(np.int(m*percentile), 0, m-1)
     mx_ind = np.clip(m-mn_ind-1, 0, m-1)
-    return _normalize_and_clip(image, sorted_vec[mn_ind], sorted_vec[mx_ind])    
+    return _normalize_and_clip(image, sorted_vec[mn_ind], sorted_vec[mx_ind])
 
 def _normalize_with_no_mask(image, percentile):
     n = image.size
@@ -72,7 +72,7 @@ def _normalize_with_zero_percentile_no_mask(image):
 
 def _normalize_with_zero_percentile_with_mask(image, mask):
     return _normalize_and_clip(image, np.amin(image[mask]), np.amax(image[mask]))
-    
+
 def normalize(image, percentile=0.0, mask=None):
     if mask is None:
         if percentile == 0.0:
@@ -92,7 +92,7 @@ if __name__ == '__main__':
 
     im_comp = im + 0.2
     im_comp = np.random.permutation(im_comp)
-    
+
     # Add outliers
     im_comp[0, 0] = -0.5
     im_comp[3, 4] = 2.0
@@ -111,11 +111,11 @@ if __name__ == '__main__':
     print(res2)
 
     res3 = normalize(im_comp, 0.05, mask)
-    print(res3)    
+    print(res3)
 
     im1 = np.arange(16*8).reshape((16, 8))
     print(im1)
     im1_ds2 = downsample(im1, 2)
     print(im1_ds2)
     im1_ds4 = downsample(im1, 4)
-    print(im1_ds4)    
+    print(im1_ds4)
